@@ -1,0 +1,32 @@
+local player = game.Players.LocalPlayer
+local UIS = game:GetService("UserInputService")
+
+if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+    player.CharacterAdded:Wait()
+end
+
+local char = player.Character
+local rootPart = char:WaitForChild("HumanoidRootPart")
+local humanoid = char:WaitForChild("Humanoid")
+
+local location = CFrame.new(-558.864868, 74.3, -2.64647651)
+
+local running = true
+
+spawn(function()
+    while running do
+        -- Make sure the character jumps before teleporting (prevents physics issues)
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        wait(0.1)
+        rootPart.CFrame = location
+        wait(5.3) -- exact delay for reward cooldown
+    end
+end)
+
+-- Press "L" to stop the loop
+UIS.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.L then
+        running = false
+        print("Teleport loop stopped.")
+    end
+end)
